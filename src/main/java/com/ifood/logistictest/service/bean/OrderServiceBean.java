@@ -21,8 +21,6 @@ import com.graphhopper.jsprit.core.problem.solution.route.activity.TimeWindow;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleImpl;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleType;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleTypeImpl;
-import com.graphhopper.jsprit.core.reporting.SolutionPrinter;
-import com.graphhopper.jsprit.core.reporting.SolutionPrinter.Print;
 import com.graphhopper.jsprit.core.util.Coordinate;
 import com.graphhopper.jsprit.core.util.Solutions;
 import com.ifood.logistictest.model.Order;
@@ -46,6 +44,12 @@ public class OrderServiceBean implements OrderService {
 	@Value("${ifood.test.costPerTransportTime}")
 	private int costPerTransportTime;
 	
+	@Value("${ifood.test.maxIterations}")
+	private int maxIterations;
+	
+	@Value("${ifood.test.initialQuantityVehicle}")
+	private int initialQuantityVehicle;
+	
 	@Override
 	public Response solveProblemRouting(Request request) {
 
@@ -60,7 +64,7 @@ public class OrderServiceBean implements OrderService {
 		
 		VehicleRoutingAlgorithm algorithm = Jsprit.Builder.newInstance(problem).buildAlgorithm();
 				
-		algorithm.setMaxIterations(10);
+		algorithm.setMaxIterations(maxIterations);
 		
 		Collection<VehicleRoutingProblemSolution> solutions = algorithm.searchSolutions();
 
@@ -102,9 +106,9 @@ public class OrderServiceBean implements OrderService {
 	
 	private int getQuantityVehicles(List<Order> orders) {
 		
-		int quantityVehicles = 1;
+		int quantityVehicles = initialQuantityVehicle;
 		
-		if (orders.size() > 3) {
+		if (orders.size() > restrictionOrderRoute) {
 			
 			quantityVehicles = orders.size() / restrictionOrderRoute;
 		}

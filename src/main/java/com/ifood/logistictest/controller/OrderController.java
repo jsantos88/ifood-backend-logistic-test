@@ -1,4 +1,4 @@
-package com.ifood.logistictest.resource;
+package com.ifood.logistictest.controller;
 
 import javax.validation.Valid;
 
@@ -14,7 +14,7 @@ import com.ifood.logistictest.service.OrderService;
 
 @RestController
 @RequestMapping("/order")
-public class OrderResource {
+public class OrderController {
 	
 	@Autowired
 	private OrderService orderService;
